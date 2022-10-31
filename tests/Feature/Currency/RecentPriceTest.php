@@ -24,6 +24,6 @@ class RecentPriceTest extends HttpTestBase
 
         $this->assertIsString($response['name']);
         $this->assertIsString($response['symbol']);
-        $this->assertIsFloat($response['price']);
+        $this->assertIsNumeric($response['price']);
     }
 }
