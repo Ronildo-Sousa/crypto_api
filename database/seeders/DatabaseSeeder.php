@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Coin;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,11 +16,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $coins = [
+            'bitcoin',
+            'dacxi',
+            'ethereum',
+            'cosmos',
+            'terra-luna-2'
+        ];
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($coins as $coin) {
+            Coin::factory()->create([
+                'identifier' => $coin,
+                'name' => $coin,
+                'symbol' => $coin,
+                'homepage_url' => "https://{$coin}.com"
+            ]);
+        }
     }
 }

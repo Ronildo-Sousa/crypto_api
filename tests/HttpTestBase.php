@@ -10,6 +10,8 @@ abstract class HttpTestBase extends TestCase
     {
         parent::setUp();
         
+        $this->artisan('db:seed');
+        
         Http::fake([
             "https://api.coingecko.com/api/v3/coins/*" => Http::response([
                'id' => 'bitcoin',
