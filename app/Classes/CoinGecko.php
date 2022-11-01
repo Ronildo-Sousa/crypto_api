@@ -5,6 +5,7 @@ namespace App\Classes;
 use App\Contracts\CurrencyApi;
 use App\Models\Coin;
 use App\Models\CurrencyHistory;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
@@ -18,6 +19,20 @@ class CoinGecko implements CurrencyApi
 
         $response = Http::get($this->baseUri)->collect();
 
+        return $this->handleCurrency($response);
+    }
+
+    public function getHistory(string $coin, string $date): Collection
+    {
+        $this->baseUri = $this->baseUri . "{$coin}/history?date={$date}&localization=false";
+
+        $response = Http::get($this->baseUri)->collect();
+
+        return $this->handleCurrency($response);
+    }
+
+    private function handleCurrency(Collection $response): Collection
+    {
         $currentPrice = $response->get('market_data')['current_price']['usd'];
 
         $DbCoin = Coin::query()
@@ -33,12 +48,5 @@ class CoinGecko implements CurrencyApi
             'symbol' => $DbCoin->symbol,
             'price' => $history->price
         ]);
-    }
-
-    public function getHistory(string $coin, string $date): Collection
-    {
-        if (Coin::all()) {
-            return Coin::all();
-        }
     }
 }

@@ -7,6 +7,7 @@ use App\Actions\Currency\GetRecentPrice;
 use App\Http\Requests\PriceHistoryRequest;
 use App\Models\Coin;
 use App\Models\CurrencyHistory;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -86,7 +87,7 @@ class CurrencyController extends Controller
 
         $hasHistory = CurrencyHistory::query()
             ->where('coin_id', $DbCoin->id)
-            ->whereDate('created_at', $date)->first();
+            ->whereDate('created_at', Carbon::parse($date))->first();
 
         if (empty($hasHistory)) {
             return null;

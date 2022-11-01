@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\HttpTestBase;
-use Tests\TestCase;
 
 class PriceHistoryTest extends HttpTestBase
 {
@@ -16,8 +15,8 @@ class PriceHistoryTest extends HttpTestBase
     public function it_should_be_able_to_get_the_coin_price_based_in_a_date()
     {
         $this->artisan('db:seed');
-
-        $response = $this->getJson(route('currency.history', ['date' => '2022-11-01']));
+       
+        $response = $this->getJson(route('currency.history', ['date' => '01-11-2022']));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
