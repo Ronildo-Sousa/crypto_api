@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Currency\GetHistory;
 use App\Actions\Currency\GetRecentPrice;
 use App\Http\Requests\PriceHistoryRequest;
 use App\Models\Coin;
@@ -28,6 +29,17 @@ class CurrencyController extends Controller
 
     public function history(PriceHistoryRequest $request, string $coin = 'bitcoin')
     {
+        if (!$this->isValidCoin($coin)) {
+            return response()->json(['message' => 'This currency is not in our database'], Response::HTTP_NOT_FOUND);
+        }
+
+        $history = $this->hasHistory($coin, $request->validated('date'));
+
+        if ($history) {
+            return $history;
+        }
+
+        return GetHistory::run($coin, $request->validated('date'));
     }
 
     private function isValidCoin(string $coin): bool
@@ -43,10 +55,8 @@ class CurrencyController extends Controller
 
     private function hasRecentPrice(string $coin): ?Collection
     {
-        $DbCoin = Coin::query()
-            ->where('identifier', $coin)
-            ->first();
-        
+        $DbCoin = $this->findCoin($coin);
+
         if (empty($DbCoin)) {
             return null;
         }
@@ -56,7 +66,7 @@ class CurrencyController extends Controller
             ->where('created_at', '<', now()->addHours(2))
             ->first();
 
-        if (!$hasRecentPrice) {
+        if (empty($hasRecentPrice)) {
             return null;
         }
         return Collect([
@@ -64,5 +74,40 @@ class CurrencyController extends Controller
             'symbol' => $DbCoin->symbol,
             'price' => $hasRecentPrice->price
         ]);
+    }
+
+    private function hasHistory(string $coin, string $date): ?Collection
+    {
+        $DbCoin = $this->findCoin($coin);
+
+        if (empty($DbCoin)) {
+            return null;
+        }
+
+        $hasHistory = CurrencyHistory::query()
+            ->where('coin_id', $DbCoin->id)
+            ->whereDate('created_at', $date)->first();
+
+        if (empty($hasHistory)) {
+            return null;
+        }
+
+        return Collect([
+            'name' => $DbCoin->name,
+            'symbol' => $DbCoin->symbol,
+            'price' => $hasHistory->price
+        ]);
+    }
+
+    private function findCoin(string $coin): ?Coin
+    {
+        $DbCoin = Coin::query()
+            ->where('identifier', $coin)
+            ->first();
+
+        if (empty($DbCoin)) {
+            return null;
+        }
+        return $DbCoin;
     }
 }

@@ -13,21 +13,23 @@ class PriceHistoryTest extends HttpTestBase
     use RefreshDatabase;
 
     /** @test */
-    // public function it_should_be_able_to_get_the_coin_price_based_in_a_date()
-    // {
-    //     $response = $this->get(route('currency.history'));
+    public function it_should_be_able_to_get_the_coin_price_based_in_a_date()
+    {
+        $this->artisan('db:seed');
 
-    //     $response->assertStatus(Response::HTTP_OK);
-    //     $response->assertJsonStructure([
-    //         'name',
-    //         'symbol',
-    //         'price'
-    //     ]);
+        $response = $this->getJson(route('currency.history', ['date' => '2022-11-01']));
 
-    //     $this->assertIsString($response['name']);
-    //     $this->assertIsString($response['symbol']);
-    //     $this->assertIsNumeric($response['price']);
-    // }
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonStructure([
+            'name',
+            'symbol',
+            'price'
+        ]);
+
+        $this->assertIsString($response['name']);
+        $this->assertIsString($response['symbol']);
+        $this->assertIsNumeric($response['price']);
+    }
 
     /** @test */
     public function date_should_be_required_and_valid()

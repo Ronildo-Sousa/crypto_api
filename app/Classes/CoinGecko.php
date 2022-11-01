@@ -34,4 +34,11 @@ class CoinGecko implements CurrencyApi
             'price' => $history->price
         ]);
     }
+
+    public function getHistory(string $coin, string $date): Collection
+    {
+        if (Coin::all()) {
+            return Coin::all();
+        }
+    }
 }
