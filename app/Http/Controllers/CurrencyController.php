@@ -28,7 +28,6 @@ class CurrencyController extends Controller
 
     public function history(PriceHistoryRequest $request, string $coin = 'bitcoin')
     {
-        
     }
 
     private function isValidCoin(string $coin): bool
@@ -47,6 +46,10 @@ class CurrencyController extends Controller
         $DbCoin = Coin::query()
             ->where('identifier', $coin)
             ->first();
+        
+        if (empty($DbCoin)) {
+            return null;
+        }
 
         $hasRecentPrice = CurrencyHistory::query()
             ->where('coin_id', $DbCoin->id)
