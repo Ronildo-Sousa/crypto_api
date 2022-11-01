@@ -26,4 +26,22 @@ class RecentPriceTest extends HttpTestBase
         $this->assertIsString($response['symbol']);
         $this->assertIsNumeric($response['price']);
     }
+
+    /** @test */
+    public function it_should_be_able_to_get_recent_coin_price_for_more_than_one_coin()
+    {
+        $dacxiResponse = $this->get(route('currency.price', ['coin' => 'dacxi']));
+        $ethResponse = $this->get(route('currency.price', ['coin' => 'ethereum']));
+
+        $dacxiResponse->assertStatus(Response::HTTP_OK);
+        $ethResponse->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
+    public function should_not_be_able_to_use_ainvalid_coin()
+    {
+        $response = $this->get(route('currency.price', ['coin' => 'some-coin']));
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
 }

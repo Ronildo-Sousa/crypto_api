@@ -10,13 +10,14 @@ use App\Models\CurrencyHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 class CurrencyController extends Controller
 {
     public function recentPrice(string $coin = 'bitcoin')
     {
         if (!$this->isValidCoin($coin)) {
-            return response()->json(['message' => 'This currency is not in our database']);
+            return response()->json(['message' => 'This currency is not in our database'], Response::HTTP_NOT_FOUND);
         }
 
         $recentPrice = $this->hasRecentPrice($coin);
@@ -50,12 +51,13 @@ class CurrencyController extends Controller
             ->where('created_at', '<', now()->addHours(2))
             ->first();
 
-        if ($hasRecentPrice) {
-            return Collect([
-                'name' => $DbCoin->name,
-                'symbol' => $DbCoin->symbol,
-                'price' => $hasRecentPrice->price
-            ]);
+        if (!$hasRecentPrice) {
+            return null;
         }
+        return Collect([
+            'name' => $DbCoin->name,
+            'symbol' => $DbCoin->symbol,
+            'price' => $hasRecentPrice->price
+        ]);
     }
 }
