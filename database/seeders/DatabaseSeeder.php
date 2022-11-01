@@ -17,22 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $coins = [
-            'bitcoin',
-            'dacxi',
-            'ethereum',
-            'cosmos',
-            'terra-luna-2'
-        ];
-
-        foreach ($coins as $coin) {
-            Coin::factory()->create([
-                'identifier' => $coin,
-                'name' => $coin,
-                'symbol' => $coin,
-                'homepage_url' => "https://{$coin}.com"
-            ]);
-        }
-        CurrencyHistory::factory()->create(['coin_id'=> 1, 'price' => 20]);
-    }  
+        $this->call(
+            [
+                BitcoinSeeder::class,
+                AtomSeeder::class,
+                DacxiSeeder::class,
+                EthSeeder::class,
+                LunaSeeder::class
+            ]
+        );
+    }
 }
