@@ -15,7 +15,7 @@ class DacxiSeeder extends Seeder
      */
     public function run()
     {
-        Coin::factory()->create([
+        Coin::query()->create([
             'identifier' => 'dacxi',
             'name' => 'Dacxi',
             'symbol' => 'DACXI',

@@ -15,7 +15,7 @@ class LunaSeeder extends Seeder
      */
     public function run()
     {
-        Coin::factory()->create([
+        Coin::query()->create([
             'identifier' => 'terra-luna-2',
             'name' => 'Terra',
             'symbol' => 'LUNA',

@@ -15,7 +15,7 @@ class EthSeeder extends Seeder
      */
     public function run()
     {
-        Coin::factory()->create([
+        Coin::query()->create([
             'identifier' => 'ethereum',
             'name' => 'Ethereum',
             'symbol' => 'ETH',

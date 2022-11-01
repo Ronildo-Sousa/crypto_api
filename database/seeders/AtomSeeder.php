@@ -15,7 +15,7 @@ class AtomSeeder extends Seeder
      */
     public function run()
     {
-        Coin::factory()->create([
+        Coin::query()->create([
             'identifier' => 'cosmos',
             'name' => 'Cosmos Hub',
             'symbol' => 'ATOM',

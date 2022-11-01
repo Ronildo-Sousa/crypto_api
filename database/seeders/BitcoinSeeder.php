@@ -15,7 +15,7 @@ class BitcoinSeeder extends Seeder
      */
     public function run()
     {
-        Coin::factory()->create([
+        Coin::query()->create([
             'identifier' => 'bitcoin',
             'name' => 'Bitcoin',
             'symbol' => 'BTC',
