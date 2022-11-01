@@ -9,6 +9,7 @@ use App\Models\Coin;
 use App\Models\CurrencyHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class CurrencyController extends Controller
@@ -22,10 +23,14 @@ class CurrencyController extends Controller
         $recentPrice = $this->hasRecentPrice($coin);
 
         if ($recentPrice) {
-            return $recentPrice;
+            Cache::remember(
+                'current_price',
+                60 * 60,
+                fn () => $recentPrice
+            );
         }
 
-        return GetRecentPrice::run($coin);
+        return  GetRecentPrice::run($coin);
     }
 
     public function history(PriceHistoryRequest $request, string $coin = 'bitcoin')
@@ -37,10 +42,14 @@ class CurrencyController extends Controller
         $history = $this->hasHistory($coin, $request->validated('date'));
 
         if ($history) {
-            return $history;
+            Cache::remember(
+                'history',
+                60 * 60,
+                fn () => $history
+            );
         }
 
-        return GetHistory::run($coin, $request->validated('date'));
+        return  GetHistory::run($coin, $request->validated('date'));
     }
 
     private function isValidCoin(string $coin): bool
