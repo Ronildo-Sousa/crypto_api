@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Currency\GetRecentPrice;
-use App\Http\Resources\RecentPriceResource;
-use App\Http\Resources\RecentPriceResourceCollection;
+use App\Http\Requests\PriceHistoryRequest;
 use App\Models\Coin;
 use App\Models\CurrencyHistory;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +24,11 @@ class CurrencyController extends Controller
         }
 
         return GetRecentPrice::run($coin);
+    }
+
+    public function history(PriceHistoryRequest $request, string $coin = 'bitcoin')
+    {
+        
     }
 
     private function isValidCoin(string $coin): bool
