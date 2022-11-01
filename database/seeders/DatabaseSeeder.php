@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Coin;
+use App\Models\CurrencyHistory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -32,5 +33,6 @@ class DatabaseSeeder extends Seeder
                 'homepage_url' => "https://{$coin}.com"
             ]);
         }
-    }
+        CurrencyHistory::factory()->create(['coin_id'=> 1, 'price' => 20]);
+    }  
 }
