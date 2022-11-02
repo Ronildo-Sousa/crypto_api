@@ -11,7 +11,7 @@ class CurrencyHistory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['price'];
+    protected $fillable = ['price', 'date'];
 
     public function coin(): BelongsTo
     {

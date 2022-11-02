@@ -19,7 +19,7 @@ class CoinGecko implements CurrencyApi
 
         $response = Http::get($this->baseUri)->collect();
 
-        return $this->handleCurrency($response);
+        return $this->handleCurrency($response, now());
     }
 
     public function getHistory(string $coin, string $date): Collection
@@ -28,10 +28,10 @@ class CoinGecko implements CurrencyApi
 
         $response = Http::get($this->baseUri)->collect();
 
-        return $this->handleCurrency($response);
+        return $this->handleCurrency($response, $date);
     }
 
-    private function handleCurrency(Collection $response): Collection
+    private function handleCurrency(Collection $response, string $date): Collection
     {
         $currentPrice = $response->get('market_data')['current_price']['usd'];
 
@@ -40,7 +40,8 @@ class CoinGecko implements CurrencyApi
             ->first();
 
         $history = $DbCoin->currencyHistory()->create([
-            'price' => $currentPrice
+            'price' => $currentPrice,
+            'date' => Carbon::parse($date)
         ]);
 
         return Collect([

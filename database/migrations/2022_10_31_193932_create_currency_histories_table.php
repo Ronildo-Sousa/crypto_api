@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('currency_histories', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('price');
+            $table->dateTime('date');
             $table->foreignIdFor(Coin::class);
             $table->timestamps();
         });

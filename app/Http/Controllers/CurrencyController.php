@@ -81,7 +81,7 @@ class CurrencyController extends Controller
 
         $hasHistory = CurrencyHistory::query()
             ->where('coin_id', $DbCoin->id)
-            ->whereDate('created_at', Carbon::parse($date))->first();
+            ->whereDate('date', Carbon::parse($date))->first();
 
         if (empty($hasHistory)) return null;
 
