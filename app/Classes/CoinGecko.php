@@ -33,6 +33,25 @@ class CoinGecko implements CurrencyApi
         return $this->handleCurrency($response, $date);
     }
 
+    public function finCoin(string $coin): bool
+    {
+        $this->baseUri = $this->baseUri . "{$coin}/?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false";
+
+        $response = Http::connectTimeout(0.5)->get($this->baseUri);
+
+        if (!$response->successful()) return false;
+        $response = $response->collect();
+        
+        Coin::query()->create([
+            'identifier' => $response->get('id'),
+            'name' => $response->get('name'),
+            'symbol' => $response->get('symbol'),
+            'homepage_url' => $response->get('links')['homepage'][0]
+        ]);
+
+        return true;
+    }
+
     private function handleCurrency(Response $response, string $date): ?Collection
     {
         if (!$response->successful()) {

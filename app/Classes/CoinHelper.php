@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\Actions\Currency\FindCoinFromApi;
+use App\Contracts\CurrencyApi;
 use App\Models\Coin;
 use App\Models\CurrencyHistory;
 use Carbon\Carbon;
@@ -56,9 +58,11 @@ class CoinHelper
 
     public static function isValidCoin(string $coin): bool
     {
-        $validCoin = Coin::query()->where('identifier', $coin)->count();
+        $hasInDatabase = Coin::query()->where('identifier', $coin)->count();
         
-        return ($validCoin > 0);
+        if($hasInDatabase > 0) return true;
+
+        return FindCoinFromApi::run($coin);
     }
 
     private static function findCoin(string $coin): ?Coin
