@@ -24,9 +24,17 @@ class CurrencyController extends Controller
         $recentPrice = $this->hasRecentPrice($coin);
 
         if ($recentPrice) return $recentPrice;
-        
 
-        return  GetRecentPrice::run($coin);
+        $result = GetRecentPrice::run($coin);
+
+        if (!$result) {
+            return response()->json(
+                ['message' => 'Could not get price for this coin'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return response()->json(['recent_price' => $result], Response::HTTP_OK);
     }
 
     public function history(PriceHistoryRequest $request, string $coin = 'bitcoin')
@@ -39,7 +47,16 @@ class CurrencyController extends Controller
 
         if ($history) return $history;
 
-        return  GetHistory::run($coin, $request->validated('date'));
+        $result = GetHistory::run($coin, $request->validated('date'));
+
+        if (!$result) {
+            return response()->json(
+                ['message' => 'Could not get price for this coin'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return response()->json(['history_price' => $result], Response::HTTP_OK);
     }
 
     private function isValidCoin(string $coin): bool
@@ -63,7 +80,7 @@ class CurrencyController extends Controller
             ->where('coin_id', $DbCoin->id)
             ->whereDate('created_at', '>=', now()->subHours(2))
             ->first();
-       
+
         if (empty($hasRecentPrice)) return null;
 
         return Collect([

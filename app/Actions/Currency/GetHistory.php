@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 class GetHistory
 {
-    public static function run(string $coin, string $date, CurrencyApi $currencyApi = new CoinGecko): Collection
+    public static function run(string $coin, string $date, CurrencyApi $currencyApi = new CoinGecko): ?Collection
     {
         return $currencyApi->getHistory($coin, $date);
     }
