@@ -25,8 +25,6 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        JsonResource::withoutWrapping();
-        CurrencyHistory::observe(CurrencyObserver::class);
+    {;
     }
 }

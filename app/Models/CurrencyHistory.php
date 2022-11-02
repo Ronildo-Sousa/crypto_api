@@ -21,7 +21,7 @@ class CurrencyHistory extends Model
     protected function price(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => floor($value / 1000),
+            get: fn ($value) => ($value / 1000),
             set: fn ($value) => ($value * 1000),
         );
     }

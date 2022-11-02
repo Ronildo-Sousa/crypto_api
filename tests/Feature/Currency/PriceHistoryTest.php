@@ -16,7 +16,7 @@ class PriceHistoryTest extends HttpTestBase
     {
         $this->artisan('db:seed');
 
-        $response = $this->getJson(route('currency.history', ['date' => '01-11-2022']));
+        $response = $this->getJson(route('currency.history', ['date' => '01-11-2022 23:36:09']));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -36,11 +36,11 @@ class PriceHistoryTest extends HttpTestBase
         $this->artisan('db:seed');
 
         $Dacxiresponse = $this->getJson(route('currency.history', [
-            'date' => '01-11-2022',
+            'date' => '01-11-2022 23:36:09',
             'coin' => 'dacxi'
         ]));
         $EthResponse = $this->getJson(route('currency.history', [
-            'date' => '01-11-2022',
+            'date' => '01-11-2022 23:36:09',
             'coin' => 'ethereum'
         ]));
 

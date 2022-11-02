@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
 
 class CurrencyController extends Controller
 {
@@ -22,13 +23,8 @@ class CurrencyController extends Controller
 
         $recentPrice = $this->hasRecentPrice($coin);
 
-        if ($recentPrice) {
-            Cache::remember(
-                'current_price',
-                60 * 60,
-                fn () => $recentPrice
-            );
-        }
+        if ($recentPrice) return $recentPrice;
+        
 
         return  GetRecentPrice::run($coin);
     }
@@ -41,13 +37,7 @@ class CurrencyController extends Controller
 
         $history = $this->hasHistory($coin, $request->validated('date'));
 
-        if ($history) {
-            Cache::remember(
-                'history',
-                60 * 60,
-                fn () => $history
-            );
-        }
+        if ($history) return $history;
 
         return  GetHistory::run($coin, $request->validated('date'));
     }
@@ -67,18 +57,15 @@ class CurrencyController extends Controller
     {
         $DbCoin = $this->findCoin($coin);
 
-        if (empty($DbCoin)) {
-            return null;
-        }
+        if (empty($DbCoin)) return null;
 
         $hasRecentPrice = CurrencyHistory::query()
             ->where('coin_id', $DbCoin->id)
-            ->where('created_at', '<', now()->addHours(2))
+            ->whereDate('created_at', '>=', now()->subHours(2))
             ->first();
+       
+        if (empty($hasRecentPrice)) return null;
 
-        if (empty($hasRecentPrice)) {
-            return null;
-        }
         return Collect([
             'name' => $DbCoin->name,
             'symbol' => $DbCoin->symbol,
@@ -90,17 +77,13 @@ class CurrencyController extends Controller
     {
         $DbCoin = $this->findCoin($coin);
 
-        if (empty($DbCoin)) {
-            return null;
-        }
+        if (empty($DbCoin)) return null;
 
         $hasHistory = CurrencyHistory::query()
             ->where('coin_id', $DbCoin->id)
             ->whereDate('created_at', Carbon::parse($date))->first();
 
-        if (empty($hasHistory)) {
-            return null;
-        }
+        if (empty($hasHistory)) return null;
 
         return Collect([
             'name' => $DbCoin->name,
@@ -115,9 +98,8 @@ class CurrencyController extends Controller
             ->where('identifier', $coin)
             ->first();
 
-        if (empty($DbCoin)) {
-            return null;
-        }
+        if (empty($DbCoin)) return null;
+
         return $DbCoin;
     }
 }
