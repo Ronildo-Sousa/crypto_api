@@ -16,7 +16,7 @@ class RecentPriceTest extends HttpTestBase
     {
         $this->artisan('db:seed');
 
-        $response = $this->get(route('currency.price'));
+        $response = $this->getJson(route('currency.price'));
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -35,8 +35,8 @@ class RecentPriceTest extends HttpTestBase
     {
         $this->artisan('db:seed');
 
-        $dacxiResponse = $this->get(route('currency.price', ['coin' => 'dacxi']));
-        $ethResponse = $this->get(route('currency.price', ['coin' => 'ethereum']));
+        $dacxiResponse = $this->getJson(route('currency.price', ['coin' => 'dacxi']));
+        $ethResponse = $this->getJson(route('currency.price', ['coin' => 'ethereum']));
 
         $dacxiResponse->assertStatus(Response::HTTP_OK);
         $dacxiResponse->assertJsonStructure([
@@ -57,13 +57,5 @@ class RecentPriceTest extends HttpTestBase
                 'price'
             ]
         ]);
-    }
-
-    /** @test */
-    public function should_not_be_able_to_use_an_invalid_coin()
-    {
-        $response = $this->get(route('currency.price', ['coin' => 'some-coin']));
-
-        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

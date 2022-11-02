@@ -33,15 +33,15 @@ class CoinGecko implements CurrencyApi
         return $this->handleCurrency($response, $date);
     }
 
-    public function finCoin(string $coin): bool
+    public function findCoin(string $coin): bool
     {
         $this->baseUri = $this->baseUri . "{$coin}/?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false";
 
         $response = Http::connectTimeout(0.5)->get($this->baseUri);
-
-        if (!$response->successful()) return false;
-        $response = $response->collect();
         
+        if ($response->status() != 200) return false;
+
+        $response = $response->collect();
         Coin::query()->create([
             'identifier' => $response->get('id'),
             'name' => $response->get('name'),
@@ -54,19 +54,18 @@ class CoinGecko implements CurrencyApi
 
     private function handleCurrency(Response $response, string $date): ?Collection
     {
-        if (!$response->successful()) {
-            return null;
-        }
+        if ($response->status() != 200) return null;
+
         $response = $response->collect();
 
         $currentPrice = $response->get('market_data')['current_price']['usd'];
-
+        
         $DbCoin = Coin::query()
             ->where('identifier', $response->get('id'))
             ->first();
         
         $history = $DbCoin->currencyHistory()->create([
-            'price' => $currentPrice,
+            'price' => floatval($currentPrice),
             'date' => $date
         ]);
 

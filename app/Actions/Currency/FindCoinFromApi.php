@@ -9,6 +9,6 @@ class FindCoinFromApi
 {
     public static function run(string $coin, CurrencyApi $currencyApi = new CoinGecko): bool
     {
-        return $currencyApi->finCoin($coin);
+        return $currencyApi->findCoin($coin);
     }
 }
