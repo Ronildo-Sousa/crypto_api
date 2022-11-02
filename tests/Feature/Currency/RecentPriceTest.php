@@ -19,15 +19,15 @@ class RecentPriceTest extends HttpTestBase
         $response = $this->get(route('currency.price'));
 
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonStructure([
-            'name',
-            'symbol',
-            'price'
-        ]);
 
-        $this->assertIsString($response['name']);
-        $this->assertIsString($response['symbol']);
-        $this->assertIsNumeric($response['price']);
+        $response->assertJsonStructure([
+            "recent_price" => [
+                'name',
+                'symbol',
+                'date',
+                'price'
+            ]
+        ]);
     }
 
     /** @test */
@@ -40,16 +40,22 @@ class RecentPriceTest extends HttpTestBase
 
         $dacxiResponse->assertStatus(Response::HTTP_OK);
         $dacxiResponse->assertJsonStructure([
-            'name',
-            'symbol',
-            'price'
+            "recent_price" => [
+                'name',
+                'symbol',
+                'date',
+                'price'
+            ]
         ]);
 
         $ethResponse->assertStatus(Response::HTTP_OK);
         $ethResponse->assertJsonStructure([
-            'name',
-            'symbol',
-            'price'
+            "recent_price" => [
+                'name',
+                'symbol',
+                'date',
+                'price'
+            ]
         ]);
     }
 

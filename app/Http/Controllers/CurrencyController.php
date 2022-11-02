@@ -84,9 +84,12 @@ class CurrencyController extends Controller
         if (empty($hasRecentPrice)) return null;
 
         return Collect([
-            'name' => $DbCoin->name,
-            'symbol' => $DbCoin->symbol,
-            'price' => $hasRecentPrice->price
+            "recent_price" => [
+                'name' => $DbCoin->name,
+                'symbol' => $DbCoin->symbol,
+                'date' => $hasRecentPrice->date,
+                'price' => $hasRecentPrice->price
+            ]
         ]);
     }
 
@@ -103,9 +106,12 @@ class CurrencyController extends Controller
         if (empty($hasHistory)) return null;
 
         return Collect([
-            'name' => $DbCoin->name,
-            'symbol' => $DbCoin->symbol,
-            'price' => $hasHistory->price
+            "history_price" => [
+                'name' => $DbCoin->name,
+                'symbol' => $DbCoin->symbol,
+                'date' => $hasHistory->date,
+                'price' => $hasHistory->price
+            ]
         ]);
     }
 

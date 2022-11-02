@@ -20,14 +20,13 @@ class PriceHistoryTest extends HttpTestBase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
-            'name',
-            'symbol',
-            'price'
+            "history_price" => [
+                'name',
+                'symbol',
+                'date',
+                'price'
+            ]
         ]);
-
-        $this->assertIsString($response['name']);
-        $this->assertIsString($response['symbol']);
-        $this->assertIsNumeric($response['price']);
     }
 
     /** @test */
@@ -46,16 +45,22 @@ class PriceHistoryTest extends HttpTestBase
 
         $Dacxiresponse->assertStatus(Response::HTTP_OK);
         $Dacxiresponse->assertJsonStructure([
-            'name',
-            'symbol',
-            'price'
+            "history_price" => [
+                'name',
+                'symbol',
+                'date',
+                'price'
+            ]
         ]);
 
         $EthResponse->assertStatus(Response::HTTP_OK);
         $EthResponse->assertJsonStructure([
-            'name',
-            'symbol',
-            'price'
+            "history_price" => [
+                'name',
+                'symbol',
+                'date',
+                'price'
+            ]
         ]);
     }
 

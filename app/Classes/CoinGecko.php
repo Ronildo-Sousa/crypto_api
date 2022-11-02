@@ -45,16 +45,17 @@ class CoinGecko implements CurrencyApi
         $DbCoin = Coin::query()
             ->where('identifier', $response->get('id'))
             ->first();
-
+        
         $history = $DbCoin->currencyHistory()->create([
             'price' => $currentPrice,
-            'date' => Carbon::parse($date)
+            'date' => $date
         ]);
 
         return Collect([
             'name' => $DbCoin->name,
             'symbol' => $DbCoin->symbol,
-            'price' => $history->price
+            'date' => $history->date,
+            'price' => round($history->price, 3)
         ]);
     }
 }
