@@ -19,9 +19,9 @@ class CoinHelper
 
         $hasRecentPrice = CurrencyHistory::query()
             ->where('coin_id', $DbCoin->id)
-            ->whereDate('created_at', '>=', now()->subHours(2))
+            ->where('date','>=', now()->subMinutes(15))
             ->first();
-
+        
         if (empty($hasRecentPrice)) return null;
 
         return Collect([
@@ -42,7 +42,7 @@ class CoinHelper
 
         $hasHistory = CurrencyHistory::query()
             ->where('coin_id', $DbCoin->id)
-            ->whereDate('date', Carbon::parse($date))->first();
+            ->where('date', Carbon::parse($date))->first();
 
         if (empty($hasHistory)) return null;
 
