@@ -34,12 +34,12 @@
 ## Endpoints 🔀
 
 ### Preço mais recente de uma moeda
-```bash
+```php
     # Este endpoint retorna o preço mais recente do Bitcoin
     GET: localhost/api/price/
 ```
-```json
-    // Retorno para este endpoint
+```php
+    # Retorno para este endpoint
     {
         "recent_price": {
             "name": "Bitcoin",
@@ -49,7 +49,7 @@
         }
     }
 ```
-```bash
+```php
     # Este endpoint também aceita outras moedas como parâmetro
     GET: localhost/api/price/dacxi
 
@@ -60,8 +60,8 @@
 
 ### Preço de uma moeda em uma determinada data
 
-```json
-    // Este endpoint retorna o preço do Bitcoin em uma determinada data
+```php
+    # Este endpoint retorna o preço do Bitcoin em uma determinada data
     GET: localhost/api/history/
     
     Body:
@@ -70,8 +70,8 @@
     }
 ```
 
-```json
-    // Retorno para este endpoint
+```php
+    # Retorno para este endpoint
     {
         "history_price": {
             "name": "Bitcoin",
@@ -81,7 +81,7 @@
         }
     }
 ```
-```bash
+```php
     # Este endpoint também aceita outras moedas como parâmetro
     GET: localhost/api/history/dacxi
 
