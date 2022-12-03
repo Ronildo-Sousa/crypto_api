@@ -2,6 +2,9 @@
 
 <img src="./public/readme.gif" alt="demostration" style="width: 70%" />
 
+## Sobre o projeto
+Esta é uma Api que faz uso de um serviço externo e disponibiliza 2 endpoints principais. Um endpoint para obter o preço mais recente de uma criptomoeda, e outro para retornar o preço de uma criptomoeda baseado em uma data fornecida.
+
 ## Configurando o projeto ⚙️
 
 ```bash
