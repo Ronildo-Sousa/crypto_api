@@ -12,10 +12,6 @@ class RecentPriceController extends Controller
 {
     public function __invoke(string $coin = "bitcoin"): Collection|JsonResponse
     {
-        if (!CoinHelper::isValidCoin($coin)) {
-            return response()->json(['message' => 'This currency is not in our database'], Response::HTTP_NOT_FOUND);
-        }
-
         $recentPrice = CoinHelper::hasRecentPrice($coin);
 
         if ($recentPrice) return $recentPrice;

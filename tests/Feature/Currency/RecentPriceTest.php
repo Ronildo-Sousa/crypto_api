@@ -16,7 +16,7 @@ class RecentPriceTest extends HttpTestBase
     {
         $this->artisan('db:seed');
 
-        $response = $this->getJson(route('currency.price'));
+        $response = $this->getJson(route('currency.price', ['coin' => 'bitcoin']));
 
         $response->assertStatus(Response::HTTP_OK);
 

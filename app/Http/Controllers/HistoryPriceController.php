@@ -13,10 +13,6 @@ class HistoryPriceController extends Controller
 {
     public function __invoke(PriceHistoryRequest $request, string $coin = 'bitcoin'): Collection|JsonResponse
     {
-        if (!CoinHelper::isValidCoin($coin)) {
-            return response()->json(['message' => 'This currency is not in our database'], Response::HTTP_NOT_FOUND);
-        }
-
         $history = CoinHelper::hasHistory($coin, $request->validated('date'));
 
         if ($history) return $history;

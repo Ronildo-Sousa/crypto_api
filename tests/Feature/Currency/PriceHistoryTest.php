@@ -16,7 +16,7 @@ class PriceHistoryTest extends HttpTestBase
     {
         $this->artisan('db:seed');
 
-        $response = $this->getJson(route('currency.history', ['date' => '01-11-2022 23:36:09']));
+        $response = $this->getJson(route('currency.history', ['date' => '01-11-2022 23:36:09', 'coin' => 'bitcoin']));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -67,8 +67,8 @@ class PriceHistoryTest extends HttpTestBase
     /** @test */
     public function date_should_be_required_and_valid()
     {
-        $nullDateResponse = $this->getJson(route('currency.history', ['date' => null]));
-        $invalidDateResponse = $this->getJson(route('currency.history', ['date' => 'some-date']));
+        $nullDateResponse = $this->getJson(route('currency.history', ['date' => null, 'coin' => 'bitcoin']));
+        $invalidDateResponse = $this->getJson(route('currency.history', ['date' => 'some-date', 'coin' => 'bitcoin']));
 
         $nullDateResponse->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $nullDateResponse->assertJsonValidationErrorFor('date');
