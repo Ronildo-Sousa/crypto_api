@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    \App\Actions\Currency\GetRecentPrice::run('bitcoin');
     return view('welcome');
 });

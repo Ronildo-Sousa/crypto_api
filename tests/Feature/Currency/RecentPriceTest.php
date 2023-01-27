@@ -33,6 +33,7 @@ class RecentPriceTest extends HttpTestBase
     /** @test */
     public function it_should_be_able_to_get_recent_coin_price_for_more_than_one_coin()
     {
+        $this->withoutExceptionHandling();
         $this->artisan('db:seed');
 
         $dacxiResponse = $this->getJson(route('currency.price', ['coin' => 'dacxi']));
