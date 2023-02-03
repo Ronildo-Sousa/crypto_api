@@ -24,30 +24,6 @@ class Coin extends Model
         return $this->hasMany(CurrencyHistory::class);
     }
 
-    public function getRecentPrice(string $coin): ?CoinPrice
-    {
-        $this->getPrice($coin, now());
-//        $DbCoin = $this->findByIdentifier($coin);
-//
-//        if (!$DbCoin) return null;
-//
-//        $hasRecentPrice = CurrencyHistory::query()
-//            ->where('coin_id', $DbCoin->id)
-//            ->where('date','>=', now()->subMinutes(15))
-//            ->first();
-//
-//        if (empty($hasRecentPrice)) return null;
-//
-//        return Collect([
-//            "recent_price" => [
-//                'name' => $DbCoin->name,
-//                'symbol' => $DbCoin->symbol,
-//                'date' => $hasRecentPrice->date,
-//                'price' => $hasRecentPrice->price
-//            ]
-//        ]);
-    }
-
     public static function GetPrice(string $coin, string $date): ?CoinPrice
     {
         $DBcoin = self::findByIdentifier($coin);

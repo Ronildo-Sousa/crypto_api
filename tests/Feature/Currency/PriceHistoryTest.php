@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Currency;
 
+use App\Models\Coin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,6 @@ class PriceHistoryTest extends HttpTestBase
     /** @test */
     public function it_should_be_able_to_get_the_coin_price_based_in_a_date()
     {
-        $this->withoutExceptionHandling();
         $this->artisan('db:seed');
 
         $response = $this->getJson(route('currency.history', ['date' => '01-11-2022 23:36:09', 'coin' => 'bitcoin']));
@@ -68,6 +68,8 @@ class PriceHistoryTest extends HttpTestBase
     /** @test */
     public function date_should_be_required_and_valid()
     {
+        $this->artisan('db:seed');
+
         $nullDateResponse = $this->getJson(route('currency.history', ['date' => null, 'coin' => 'bitcoin']));
         $invalidDateResponse = $this->getJson(route('currency.history', ['date' => 'some-date', 'coin' => 'bitcoin']));
 
