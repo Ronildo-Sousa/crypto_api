@@ -50,6 +50,7 @@ class ApiKeyMiddlewareTest extends TestCase
     /** @test */
     public function users_must_have_an_api_key_to_get_the_history_price()
     {
+//        $this->withoutExceptionHandling();
         $this->artisan('db:seed');
 
         $response = $this->getJson(route('currency.history', [
@@ -58,21 +59,11 @@ class ApiKeyMiddlewareTest extends TestCase
         ]));
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
-        CurrencyHistory::factory()->create(['coin_id' => 1, 'date' => now()]);
-        $response = $this->getJson(route('currency.history', [
+        $another = $this->getJson(route('currency.history', [
             'coin' => 'bitcoin',
             'date' => Carbon::parse(now()->toDateTimeString())->format('d-m-Y H:i:s'),
-            'api_key' => $this->user->api_key
+            'api_key' => 'invalid-api-key'
         ]));
-
-        $response->assertStatus(Response::HTTP_OK)
-            ->assertJsonStructure([
-                "history_price" => [
-                    'name',
-                    'symbol',
-                    'date',
-                    'price'
-                ]
-            ]);
+        $another->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 }

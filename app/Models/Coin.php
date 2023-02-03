@@ -45,13 +45,15 @@ class Coin extends Model
         ]);
     }
 
-    public static function findByIdentifier(string $coin): ?Coin
+    public static function findByIdentifier(?string $coin): ?Coin
     {
+        if ($coin == null) return null;
+
         /** @var Coin $DBcoin */
         $DBcoin = Coin::query()
             ->where('identifier', $coin)
             ->first();
 
-        return $DBcoin ?? null;
+        return $DBcoin;
     }
 }
