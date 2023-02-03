@@ -16,7 +16,7 @@ class HistoryPriceController extends Controller
     {
         $history = Coin::getPrice($coin, $request->validated('date'));
 
-        if ($history) return $history;
+        if ($history) return response()->json(['history_price' => $history]);
 
         $date = Carbon::parse($request->validated('date'));
         $result = GetHistory::run($coin, $date);
@@ -28,6 +28,6 @@ class HistoryPriceController extends Controller
             );
         }
 
-        return response()->json(['history_price' => $result], Response::HTTP_OK);
+        return response()->json(['history_price' => $result]);
     }
 }

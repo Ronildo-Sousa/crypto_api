@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'api_key',
         'password',
     ];
 
@@ -30,6 +31,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'api_key',
         'remember_token',
     ];
 
@@ -41,4 +43,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function hasValidApiKey(string $apiKey): bool
+    {
+        if (!$apiKey) return false;
+
+        return User::query()
+            ->where('api_key', $apiKey)
+                ->count() === 1;
+    }
 }

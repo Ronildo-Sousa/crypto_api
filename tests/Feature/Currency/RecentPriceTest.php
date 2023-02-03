@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Currency;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,12 +12,22 @@ class RecentPriceTest extends HttpTestBase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     /** @test */
     public function it_should_be_able_to_get_recent_coin_price()
     {
         $this->artisan('db:seed');
 
-        $response = $this->getJson(route('currency.price', ['coin' => 'bitcoin']));
+        $response = $this->getJson(route('currency.price', [
+            'coin' => 'bitcoin',
+            'api_key' => $this->user->api_key
+        ]));
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -35,8 +46,14 @@ class RecentPriceTest extends HttpTestBase
     {
         $this->artisan('db:seed');
 
-        $dacxiResponse = $this->getJson(route('currency.price', ['coin' => 'dacxi']));
-        $ethResponse = $this->getJson(route('currency.price', ['coin' => 'ethereum']));
+        $dacxiResponse = $this->getJson(route('currency.price', [
+            'coin' => 'dacxi',
+            'api_key' => $this->user->api_key
+        ]));
+        $ethResponse = $this->getJson(route('currency.price', [
+            'coin' => 'ethereum',
+            'api_key' => $this->user->api_key
+        ]));
 
         $dacxiResponse->assertStatus(Response::HTTP_OK);
         $dacxiResponse->assertJsonStructure([

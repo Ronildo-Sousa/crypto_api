@@ -15,7 +15,7 @@ class RecentPriceController extends Controller
     {
         $recentPrice = Coin::getPrice($request->coin, now()->subMinutes(15));
 
-        if ($recentPrice) return $recentPrice;
+        if ($recentPrice) return response()->json(['recent_price' => $recentPrice]);
 
         $result = GetRecentPrice::run($request->coin);
 
@@ -26,6 +26,6 @@ class RecentPriceController extends Controller
             );
         }
 
-        return response()->json(['recent_price' => $result], Response::HTTP_OK);
+        return response()->json(['recent_price' => $result]);
     }
 }
