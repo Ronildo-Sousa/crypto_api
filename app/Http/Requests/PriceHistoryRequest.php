@@ -24,7 +24,7 @@ class PriceHistoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'required|date|date_format:d-m-Y H:i:s'
+            'date' => ['required','date','date_format:d-m-Y H:i:s']
         ];
     }
 }

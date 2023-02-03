@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Currency\GetRecentPrice;
-use App\Classes\CoinHelper;
+use App\DTOs\Coins\CoinPrice;
+use App\Models\Coin;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class RecentPriceController extends Controller
 {
-    public function __invoke(string $coin = "bitcoin"): Collection|JsonResponse
+    public function __invoke(Request $request): CoinPrice|JsonResponse
     {
-        $recentPrice = CoinHelper::hasRecentPrice($coin);
+        $recentPrice = Coin::getPrice($request->coin, now()->subMinutes(15));
 
         if ($recentPrice) return $recentPrice;
 
-        $result = GetRecentPrice::run($coin);
+        $result = GetRecentPrice::run($request->coin);
 
         if (!$result) {
             return response()->json(

@@ -27,19 +27,18 @@ class CoinGecko implements CurrencyApi
 
     public function getHistory(string $coin, Carbon $date): ?CoinPrice
     {
-        return new CoinPrice();
-//        $this->baseUri = $this->baseUri . "{$coin}/history?date={$date}&localization=false";
-//
-//        $response = Http::connectTimeout(0.5)->get($this->baseUri);
-//
-//        return $this->handleCurrency($response, $date);
+        $uri = $this->baseUrl . "{$coin}/history?date={$date}&localization=false";
+
+        $response = Http::connectTimeout(0.5)->get($uri)->collect();
+
+        return $this->handleCurrency($response, $date);
     }
 
     public function findCoin(string $coin): bool
     {
-        $this->baseUri = $this->baseUri . "{$coin}/?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false";
+        $uri = $this->baseUrl . "{$coin}/?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false";
 
-        $response = Http::connectTimeout(0.5)->get($this->baseUri);
+        $response = Http::connectTimeout(0.5)->get($uri);
 
         if ($response->status() != 200) return false;
 
